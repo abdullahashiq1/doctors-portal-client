@@ -9,6 +9,7 @@ import { Link, useNavigate, useLocation} from 'react-router-dom';
 const LoginPage = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
     const { register, formState: { errors }, handleSubmit } = useForm();
+    
     const [
         signInWithEmailAndPassword,
         user,
@@ -16,24 +17,22 @@ const LoginPage = () => {
         error,
     ] = useSignInWithEmailAndPassword(auth);
 
+        let signInError;
+        const navigate = useNavigate();
+        const location = useLocation();
+        let from = location.state?.from?.pathname || "/";
+
     useEffect( ()=>{
         if(user || gUser){
         navigate(from, { replace: true});
     }
-    }, [user, gUser, navigate]);
-
-    let signInError;
-
-    const navigate = useNavigate();
-    const location = useLocation();
-    let from = location.state?.from?.pathname || "/";
+    }, [user, gUser, from, navigate]);  
 
     
     if(loading || gLoading){
         return <Loading></Loading>
     }
-
-    
+   
 
     if(error || gError){
         signInError= <p className="text-red-500"><small>{error?.message || gError?.message}</small></p>

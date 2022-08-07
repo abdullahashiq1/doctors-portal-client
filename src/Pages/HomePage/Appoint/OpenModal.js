@@ -2,18 +2,51 @@ import React from 'react';
 import { format } from 'date-fns';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../../firebase.init';
+import { toast } from 'react-toastify';
 
 
-const OpenModal = ({treatment, date, setTreatment}) => {
+const OpenModal = ({ date, treatment, setTreatment}) => {
     const {_id, name, slots} = treatment;
     const [ user, loading, error ] = useAuthState(auth);
+    const formetedDate = format(date, 'PP');
+
 
     const handleBooking = event =>{
         event.preventDefault();
         const slot = event.target.slot.value;
 
-        // For to close modal
-        setTreatment(null);
+        const booking = {
+            treatmentId: _id,
+            treatment:name,
+            date: formetedDate,
+            slot,
+            patient:user.email,
+            patientName:user.displayName,
+            phone: event.target.phone.value,
+
+        }
+
+        fetch('http://localhost:5000/booking', {
+            method: 'POST',
+            headers:{
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(booking)
+        })
+        .then(res => res.json())
+        .then(data => {
+            // to close the modal
+            
+            if(data.success){
+                toast(`Appointment is set, ${formetedDate} at ${slot}`)
+            }
+            else{
+                toast.error(`Already have an appointment on, ${data.booking?.date} at ${data.booking?.slot}`)
+            }
+            setTreatment(null);
+        })
+
+        
 
     }
 
@@ -35,10 +68,10 @@ const OpenModal = ({treatment, date, setTreatment}) => {
                                 }
                                
                         </select>
-                        <input type="text" name="name" disabled value={user?.displayName || ''} className="input input-bordered w-full max-w-xs" />
-                        <input type="email" disabled value={user?.email || ''} placeholder="Email" className="input input-bordered w-full max-w-xs" />
-                        <input type="number" placeholder="Phone Number" className="input input-bordered w-full max-w-xs" />
-                        <input type="submit" value="submit" className="btn btn-secondary w-full max-w-xs" />
+                         <input type="text" name="name" disabled value={user?.displayName || ''} className="input input-bordered w-full max-w-xs" />
+                        <input type="email" name="email" disabled value={user?.email || ''} className="input input-bordered w-full max-w-xs" />
+                        <input type="text" name="phone" placeholder="Phone Number" className="input input-bordered w-full max-w-xs" />
+                        <input type="submit" value="Submit" className="btn btn-secondary w-full max-w-xs" />
                     </form>                    
                 </div>
             </div>
