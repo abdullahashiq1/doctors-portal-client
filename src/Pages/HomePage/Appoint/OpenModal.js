@@ -26,7 +26,7 @@ const OpenModal = ({ date, treatment, setTreatment}) => {
 
         }
 
-        fetch('http://localhost:5000/booking', {
+        fetch('https://floating-tundra-88660.herokuapp.com/booking', {
             method: 'POST',
             headers:{
                 'content-type': 'application/json'

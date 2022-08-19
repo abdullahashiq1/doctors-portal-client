@@ -12,7 +12,7 @@ const AvailableAppoint = ({date}) => {
     const formattedDate = format(date, 'PP');
 
 //     const { data:services, isLoading  } = useQuery(['available', formattedDate ], () =>
-//      fetch(`http://localhost:5000/available?date=${formattedDate}`)
+//      fetch(`https://floating-tundra-88660.herokuapp.com/available?date=${formattedDate}`)
 //         .then(res => res.json())
 //    )
 
@@ -21,7 +21,7 @@ const AvailableAppoint = ({date}) => {
 //    }
 
     useEffect( ()=>{
-        fetch(`http://localhost:5000/available?date=${formattedDate}`)
+        fetch(`https://floating-tundra-88660.herokuapp.com/available?date=${formattedDate}`)
         .then(res => res.json())
         .then(data => setServices(data))
     } ,[formattedDate])

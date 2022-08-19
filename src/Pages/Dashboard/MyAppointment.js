@@ -8,7 +8,7 @@ const MyAppointment = () => {
 
     useEffect( ()=>{
         if(user){
-            fetch(`http://localhost:5000/booking?patient=${user.email}`)
+            fetch(`https://floating-tundra-88660.herokuapp.com/booking?patient=${user.email}`)
             .then(res=>res.json())
             .then(data => setAppointments(data))
         }
