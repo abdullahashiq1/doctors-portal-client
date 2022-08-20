@@ -63,8 +63,7 @@ const AddDoctor = () => {
             }
             console.log('imgbb', result);
         })
-        
-        
+                
     }
     
     return (
